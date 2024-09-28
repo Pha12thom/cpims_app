@@ -48,10 +48,10 @@ def test_login(request):
         else:
             return redirect('/login/')
     return render(request, 'cpims_test/login.html')
+
 @csrf_exempt
 def get_data_by_alien_card(request):
     if request.method == 'POST':
-     
         id_number = request.POST.get('id_number')
         serial_number = request.POST.get('serial_number')
         session = Session()
@@ -59,8 +59,8 @@ def get_data_by_alien_card(request):
         transport = Transport(session=session)
         client = Client(wsdl, transport=transport)
         response = client.service.GetDataByAlienCard(id_number=id_number, serial_number=serial_number)
-            # Handle the response as needed
-        return JsonResponse(response, content_type='application/json', safe=False)
+        # Handle the response as needed
+        return render(request, 'cpims_test/alien_card_data.html', {'response': response})
     return render(request, 'cpims_test/alien_id.html')
 
 
@@ -76,7 +76,7 @@ def verification_by_passport(request):
         client = Client(wsdl, transport=transport)
         response = client.service.VerificationByPassport(id_number=id_number, passport_number=passport_number, fingerprints=fingerprints)
         return JsonResponse(response, content_type='application/json', safe=False)
-    return render(request, 'cpims_test/passport_verification.html')
+    return render(request, 'cpims_test/passport_verification_form.html')
     
         
     
