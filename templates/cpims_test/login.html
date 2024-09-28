@@ -1,6 +1,6 @@
-{% extends "base.html" %} {% block content %}
-<h2>Login</h2>
-<form method="post" action="/login">
+<h2>
+    Login</h2>
+<form method="post" action="{% url 'test_passport_verification' %}">
     <div>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -13,4 +13,3 @@
         <button type="submit">Login</button>
     </div>
 </form>
-{% endblock %}

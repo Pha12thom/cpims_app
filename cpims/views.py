@@ -31,38 +31,47 @@ from requests.auth import HTTPBasicAuth
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 
-username = 'test'
-password = '2704Mogo'
 wsdl = 'https://dev.cpims.net/IPRSServerwcf?wsdl'
 
 @csrf_exempt
 def test_login(request):
     if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         session = Session()
         session.auth = HTTPBasicAuth(username, password)
         transport = Transport(session=session)
-        client = Client(wsdl, transport=transport)
-        response = client.service.Login(username=username, password=password)
-        if response == 1:
-            return redirect('/dashboard/')
-        else:
-            return redirect('/login/')
+        try:
+            client = Client(wsdl, transport=transport)
+            response = client.service.Login(username=username, password=password)
+            if response == 1:
+                request.session['username'] = username
+                request.session['password'] = password
+                return redirect('/dashboard/')
+            else:
+                return redirect('/login/')
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
     return render(request, 'cpims_test/login.html')
+
 
 @csrf_exempt
 def get_data_by_alien_card(request):
     if request.method == 'POST':
         id_number = request.POST.get('id_number')
         serial_number = request.POST.get('serial_number')
+        username = request.session.get('username')
+        password = request.session.get('password')
         session = Session()
         session.auth = HTTPBasicAuth(username, password)
         transport = Transport(session=session)
-        client = Client(wsdl, transport=transport)
-        response = client.service.GetDataByAlienCard(id_number=id_number, serial_number=serial_number)
-        # Handle the response as needed
-        return render(request, 'cpims_test/alien_card_data.html', {'response': response})
+        try:
+            client = Client(wsdl, transport=transport)
+            response = client.service.GetDataByAlienCard(id_number=id_number, serial_number=serial_number)
+            return render(request, 'cpims_test/alien_card_data.html', {'response': response})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
     return render(request, 'cpims_test/alien_id.html')
-
 
 
 @csrf_exempt
@@ -71,20 +80,19 @@ def verification_by_passport(request):
         id_number = request.POST.get('id_number')
         passport_number = request.POST.get('passport_number')
         fingerprints = request.POST.get('fingerprints')
-        wsdl = 'https://dev.cpims.net/IPRSServerwcf?wsdl'
-        transport = Transport(http_auth=HTTPBasicAuth(username, password))
-        client = Client(wsdl, transport=transport)
-        response = client.service.VerificationByPassport(id_number=id_number, passport_number=passport_number, fingerprints=fingerprints)
-        return JsonResponse(response, content_type='application/json', safe=False)
+        username = request.session.get('username')
+        password = request.session.get('password')
+        session = Session()
+        session.auth = HTTPBasicAuth(username, password)
+        transport = Transport(session=session)
+        try:
+            client = Client(wsdl, transport=transport)
+            response = client.service.VerificationByPassport(id_number=id_number, passport_number=passport_number, fingerprints=fingerprints)
+            return JsonResponse(response, content_type='application/json', safe=False)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
     return render(request, 'cpims_test/passport_verification_form.html')
-    
-        
-    
-    
-    
-    
-    
-    
+ 
     
     
     
