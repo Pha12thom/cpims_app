@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'cpovc_help',
     'cpovc_preventive',
     'cpovc_pmtct',
+    
     'cpovc_dashboard',
     'cpovc_dreams',
     'rest_framework.authtoken',

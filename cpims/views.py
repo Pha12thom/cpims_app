@@ -2,7 +2,7 @@
 import memcache
 import sys
 from datetime import datetime, timedelta
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from cpovc_registry.functions import dashboard, ovc_dashboard, get_public_dash_ovc_hiv_status, \
     get_ovc_hiv_status, fetch_locality_data, fetch_total_ovc_ever, fetch_total_ovc_ever_exited, \
@@ -13,6 +13,81 @@ from cpovc_registry.functions import dashboard, ovc_dashboard, get_public_dash_o
 from cpovc_main.functions import get_dict
 from cpovc_access.functions import access_request
 from django.contrib.auth.decorators import login_required
+from zeep import Client
+from zeep.transports import Transport
+from requests.auth import HTTPBasicAuth
+from django.views.decorators.csrf import csrf_exempt
+from zeep import Client
+from zeep.transports import Transport
+from requests import Session
+from requests.auth import HTTPBasicAuth
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+
+from zeep import Client
+from zeep.transports import Transport
+from requests import Session
+from requests.auth import HTTPBasicAuth
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+
+username = 'test'
+password = '2704Mogo'
+wsdl = 'https://dev.cpims.net/IPRSServerwcf?wsdl'
+
+@csrf_exempt
+def test_login(request):
+    if request.method == 'POST':
+        session = Session()
+        session.auth = HTTPBasicAuth(username, password)
+        transport = Transport(session=session)
+        client = Client(wsdl, transport=transport)
+        response = client.service.Login(username=username, password=password)
+        if response == 1:
+            return redirect('/dashboard/')
+        else:
+            return redirect('/login/')
+    return render(request, 'cpims_test/login.html')
+@csrf_exempt
+def get_data_by_alien_card(request):
+    if request.method == 'POST':
+     
+        id_number = request.POST.get('id_number')
+        serial_number = request.POST.get('serial_number')
+        session = Session()
+        session.auth = HTTPBasicAuth(username, password)
+        transport = Transport(session=session)
+        client = Client(wsdl, transport=transport)
+        response = client.service.GetDataByAlienCard(id_number=id_number, serial_number=serial_number)
+            # Handle the response as needed
+        return JsonResponse(response, content_type='application/json', safe=False)
+    return render(request, 'cpims_test/alien_id.html')
+
+
+
+@csrf_exempt
+def verification_by_passport(request):
+    if request.method == 'POST':
+        id_number = request.POST.get('id_number')
+        passport_number = request.POST.get('passport_number')
+        fingerprints = request.POST.get('fingerprints')
+        wsdl = 'https://dev.cpims.net/IPRSServerwcf?wsdl'
+        transport = Transport(http_auth=HTTPBasicAuth(username, password))
+        client = Client(wsdl, transport=transport)
+        response = client.service.VerificationByPassport(id_number=id_number, passport_number=passport_number, fingerprints=fingerprints)
+        return JsonResponse(response, content_type='application/json', safe=False)
+    return render(request, 'cpims_test/passport_verification.html')
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 mc = memcache.Client(['127.0.0.1:11211'], debug=0)
 

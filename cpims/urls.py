@@ -128,6 +128,11 @@ urlpatterns = [
     path('api/docs/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    
+    #our test urls
+    path('test_login/', views.test_login, name='test_login'),
+    path('test_passport_verification/', views.get_data_by_alien_card, name='test_passport_verification'),
+    path('test_verification_pass/', views.verification_by_passport, name='test_verificationpass'),
 ]
 
 handler400 = 'cpims.views.handler_400'

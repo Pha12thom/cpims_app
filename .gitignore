@@ -2,3 +2,5 @@ __pycache__
 *.pyc
 migrations
 cpims/settings.py
+/venv
+/env

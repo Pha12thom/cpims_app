@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alien ID</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        form {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            margin: auto;
+            padding: 2em;
+            border-radius: 1em;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        h2 {
+            text-align: center;
+            color: #fff;
+        }
+        
+        label {
+            margin-top: 1em;
+            display: block;
+            color: #fff;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.5em;
+            margin-top: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 0.5em;
+            background: rgba(255, 255, 255, 0.5);
+            color: #333;
+        }
+        
+        button {
+            margin-top: 1em;
+            padding: 0.7em;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 0.5em;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1em;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <form method="post" action="">
+        <h2>Alien ID</h2>
+        <label for="id_number">ID Number:</label>
+        <input type="text" id="id_number" name="id_number" required><br><br>
+
+        <label for="serial_number">Serial Number:</label>
+        <input type="text" id="serial_number" name="serial_number" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html>

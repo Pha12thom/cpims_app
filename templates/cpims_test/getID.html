@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Data By Alien Card</title>
+</head>
+
+<body>
+    <h1>Get Data By Alien Card</h1>
+    <form action="{% url 'test_passport_verification' %}" method="get">
+        <label for="id_number">ID Number:</label>
+        <input type="text" id="id_number" name="id_number" required><br><br>
+
+        <label for="passport_number">Passport Number:</label>
+        <input type="text" id="passport_number" name="passport_number" required><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+
+</html>

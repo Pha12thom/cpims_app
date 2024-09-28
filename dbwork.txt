@@ -1,0 +1,40 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+Open psql
+
+bash
+Copy code
+psql -U postgres
+You'll be prompted to enter the PostgreSQL superuser password.
+
+Create a new database Replace cpims_db_instance with the name of your database:
+
+sql
+Copy code
+CREATE DATABASE cpims_db_instance;
+Create a user Replace cpims_db_user with the desired username:
+
+sql
+Copy code
+CREATE USER cpims_db_user WITH PASSWORD 'cpims_db_pass';
+Grant privileges to the user
+
+sql
+Copy code
+GRANT ALL PRIVILEGES ON DATABASE cpims_db_instance TO cpims_db_user;
+"""
+
