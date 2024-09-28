@@ -30,6 +30,9 @@ from requests import Session
 from requests.auth import HTTPBasicAuth
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import requests
+
 
 wsdl = 'https://dev.cpims.net/IPRSServerwcf?wsdl'
 
@@ -43,13 +46,14 @@ def test_login(request):
         transport = Transport(session=session)
         try:
             client = Client(wsdl, transport=transport)
-            response = client.service.Login(username=username, password=password)
+            # Use a dictionary to handle the 'pass' argument
+            response = client.service.Login(**{'log': username, 'pass': password})
             if response == 1:
                 request.session['username'] = username
                 request.session['password'] = password
-                return redirect('/dashboard/')
+                return redirect('/test_passport_verification/')
             else:
-                return redirect('/login/')
+                return redirect('/dashboard/')
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     return render(request, 'cpims_test/login.html')
@@ -93,7 +97,22 @@ def verification_by_passport(request):
             return JsonResponse({'error': str(e)}, status=500)
     return render(request, 'cpims_test/passport_verification_form.html')
  
-    
+def get_data_by_birth_certificate(request):
+    if request.method == 'POST':
+        cirt_no = request.POST.get('cirt_no')
+        username = request.session.get('username')
+        password = request.session.get('password')
+        session = Session()
+        session.auth = HTTPBasicAuth(username, password)
+        transport = Transport(session=session)
+        try:
+            client = Client(wsdl, transport=transport)
+            response = client.service.GetDataByBirthCertificate(cirt_no=cirt_no)
+            return render(request, 'cpims_test/birth_certificate_data.html', {'response': response})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return render(request, 'cpims_test/birth_certificate.html')
+   
     
     
 
